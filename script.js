@@ -85,7 +85,7 @@ function moveSnake(){
     snake.unshift(head);
     // if food is eaten
     if(snake[0].x === foodX && snake[0].y === foodY){
-        score += 2;
+        score += 1;
         scoreText.textContent = score;
         createFood();
     }
