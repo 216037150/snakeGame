@@ -1,17 +1,20 @@
 
-
-#gameContainer{
+/* Default styles (Desktop) */
+#gameContainer {
     margin-top: 15px;
     text-align: center;
 }
-#gameBoard{
+
+#gameBoard {
     border: 3px solid;
 }
-#scoreText{
+
+#scoreText {
     font-family: "Permanent Marker", cursive;
     font-size: 30px;
 }
-#resetBtn{
+
+#resetBtn {
     font-family: "Permanent Marker", cursive;
     font-size: 20px;
     width: 100px;
@@ -19,4 +22,48 @@
     border: 4px solid;
     border-radius: 15px;
     cursor: pointer;
+}
+
+/* =========================
+   Tablet screens (≤ 768px)
+   ========================= */
+@media (max-width: 768px) {
+    #gameBoard {
+        width: 400px;
+        height: 400px;
+    }
+
+    #scoreText {
+        font-size: 26px;
+    }
+
+    #resetBtn {
+        width: 90px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+/* =========================
+   Mobile screens (≤ 480px)
+   ========================= */
+@media (max-width: 480px) {
+    #gameContainer {
+        margin-top: 10px;
+    }
+
+    #gameBoard {
+        width: 300px;
+        height: 300px;
+    }
+
+    #scoreText {
+        font-size: 22px;
+    }
+
+    #resetBtn {
+        width: 80px;
+        height: 40px;
+        font-size: 16px;
+    }
 }
