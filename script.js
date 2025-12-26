@@ -5,15 +5,15 @@ const resetBtn = document.querySelector("#resetBtn");
 const startSound = document.getElementById("startSound");
 const eatSound = document.getElementById("eatSound");
 
-const snakeBodyRadius = 0; // Border radius for snake body
-const snakeHeadRadius = 10; // Border radius for snake head
+const snakeBodyRadius = 0;
+const snakeHeadRadius = 10;
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 const boardBackground = "#fefefe";
 const snakeColor = "green";
 const snakeBorder = "white";
-const snakeHeadColor = "blue"; // Unique color for the snake head
-const snakeHeadBorder = "darkblue"; // Border color for the snake head
+const snakeHeadColor = "blue";
+const snakeHeadBorder = "darkblue";
 const foodColor = "red";
 const unitSize = 25;
 
@@ -34,13 +34,25 @@ let snake = [
 window.addEventListener("keydown", changeDirection);
 resetBtn.addEventListener("click", resetGame);
 
+const upBtn = document.querySelector(".up");
+const downBtn = document.querySelector(".down");
+const leftBtn = document.querySelector(".left");
+const rightBtn = document.querySelector(".right");
+
+upBtn.addEventListener("click", () => setDirection("UP"));
+downBtn.addEventListener("click", () => setDirection("DOWN"));
+leftBtn.addEventListener("click", () => setDirection("LEFT"));
+rightBtn.addEventListener("click", () => setDirection("RIGHT"));
+
 gameStart();
 
 function gameStart(){
-    running= true;
+    running = true;
     scoreText.textContent = score;
     createFood();
     drawFood();
+    startSound.currentTime = 0;
+    startSound.play(); // Play start sound
     nextTick();
 };
 
@@ -54,8 +66,7 @@ function nextTick(){
             checkGameOver();
             nextTick();
         }, 90);
-    }
-    else{
+    } else {
         displayGameOver();
     }
 };
@@ -81,17 +92,18 @@ function drawFood(){
 
 function moveSnake(){
     const head = {x: snake[0].x + xVelocity, y: snake[0].y + yVelocity};
-    
     snake.unshift(head);
-    // if food is eaten
+
+    // Check if food eaten
     if(snake[0].x === foodX && snake[0].y === foodY){
         score += 1;
         scoreText.textContent = score;
         createFood();
-    }
-    else{
+        eatSound.currentTime = 0;
+        eatSound.play(); // Play eat sound
+    } else {
         snake.pop();
-    }     
+    }
 };
 
 function drawSnake(){
@@ -100,18 +112,13 @@ function drawSnake(){
     
     for (let i = 0; i < snake.length; i++) {
         const snakePart = snake[i];
-        
-        // Check if this part is the head
-        if (i === 0) {
-            ctx.fillStyle = snakeHeadColor; // Use unique head color
-            ctx.strokeStyle = snakeHeadBorder; // Use unique head border color
+        if(i === 0){
+            ctx.fillStyle = snakeHeadColor;
+            ctx.strokeStyle = snakeHeadBorder;
         }
-        
         ctx.fillRect(snakePart.x, snakePart.y, unitSize, unitSize);
         ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
-        
-        // Reset colors back to default after drawing head
-        if (i === 0) {
+        if(i === 0){
             ctx.fillStyle = snakeColor;
             ctx.strokeStyle = snakeBorder;
         }
@@ -120,11 +127,7 @@ function drawSnake(){
 
 function changeDirection(event){
     const keyPressed = event.keyCode;
-    const LEFT = 37;
-    const UP = 38;
-    const RIGHT = 39;
-    const DOWN = 40;
-
+    const LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40;
     const goingUp = (yVelocity === -unitSize);
     const goingDown = (yVelocity === unitSize);
     const goingRight = (xVelocity === unitSize);
@@ -132,41 +135,22 @@ function changeDirection(event){
 
     switch(true){
         case (keyPressed === LEFT && !goingRight):
-            xVelocity = -unitSize;
-            yVelocity = 0;
-            break;
+            xVelocity = -unitSize; yVelocity = 0; break;
         case (keyPressed === UP && !goingDown):
-            xVelocity = 0;
-            yVelocity = -unitSize;
-            break;
+            xVelocity = 0; yVelocity = -unitSize; break;
         case (keyPressed === RIGHT && !goingLeft):
-            xVelocity = unitSize;
-            yVelocity = 0;
-            break;
+            xVelocity = unitSize; yVelocity = 0; break;
         case (keyPressed === DOWN && !goingUp):
-            xVelocity = 0;
-            yVelocity = unitSize;
-            break;
+            xVelocity = 0; yVelocity = unitSize; break;
     }
 };
 
 function checkGameOver(){
-    switch(true){
-        case (snake[0].x < 0):
-            running = false;
-            break;
-        case (snake[0].x >= gameWidth):
-            running = false;
-            break;
-        case (snake[0].y < 0):
-            running = false;
-            break;
-        case (snake[0].y >= gameHeight):
-            running = false;
-            break;
+    if(snake[0].x < 0 || snake[0].x >= gameWidth || snake[0].y < 0 || snake[0].y >= gameHeight){
+        running = false;
     }
-    
-    for(let i = 1; i < snake.length; i+=1){
+
+    for(let i = 1; i < snake.length; i++){
         if(snake[i].x === snake[0].x && snake[i].y === snake[0].y){
             running = false;
         }
@@ -177,7 +161,7 @@ function displayGameOver(){
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER!", gameWidth / 2, gameHeight / 2);
+    ctx.fillText("GAME OVER!", gameWidth/2, gameHeight/2);
     running = false;
 };
 
@@ -194,3 +178,25 @@ function resetGame(){
     ];
     gameStart();
 };
+
+function setDirection(direction){
+    const goingUp = (yVelocity === -unitSize);
+    const goingDown = (yVelocity === unitSize);
+    const goingRight = (xVelocity === unitSize);
+    const goingLeft = (xVelocity === -unitSize);
+
+    switch(direction){
+        case "UP":
+            if(!goingDown){ xVelocity = 0; yVelocity = -unitSize; }
+            break;
+        case "DOWN":
+            if(!goingUp){ xVelocity = 0; yVelocity = unitSize; }
+            break;
+        case "LEFT":
+            if(!goingRight){ xVelocity = -unitSize; yVelocity = 0; }
+            break;
+        case "RIGHT":
+            if(!goingLeft){ xVelocity = unitSize; yVelocity = 0; }
+            break;
+    }
+}

@@ -51,6 +51,13 @@
     #gameContainer {
         margin-top: 100px;
         border-radius: 10px;
+        border: #ccc;
+    }
+    
+    body{
+        /* background-color: #a0d8ef; */
+        background-color: #2c2c2c;
+         color: #fff;  
     }
 
     #gameBoard {
@@ -67,4 +74,52 @@
         height: 40px;
         font-size: 16px;
     }
+}
+/* Mobile Controls (D-pad) */
+#mobileControls {
+    display: none; /* hidden on desktop */
+    margin-top: 20px;
+    justify-content: center;
+
+}
+
+@media (max-width: 480px) {
+    #mobileControls {
+        display: flex;
+        justify-content: center;
+    }
+
+    .dpad {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px; /* space between rows */
+    }
+
+    .horizontal-controls {
+        display: flex;
+        justify-content: center;
+        gap: 40px; /* space between W and E */
+    }
+}
+
+/* Arrow button style */
+.ctrl-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 2px solid #333;
+    background: #eaeaea;
+    cursor: pointer;
+    user-select: none;
+}
+
+.ctrl-btn:active {
+    background: #ccc;
 }
